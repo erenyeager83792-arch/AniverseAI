@@ -1,5 +1,5 @@
 entrypoint = "main.sh"
-modules = ["bash", "nodejs-20"]
+modules = ["bash", "nodejs-20", "postgresql-16"]
 
 [nix]
 channel = "stable-24_05"
@@ -39,6 +39,10 @@ outputType = "webview"
 [[ports]]
 localPort = 5000
 externalPort = 80
+
+[[ports]]
+localPort = 33117
+externalPort = 3001
 
 [[ports]]
 localPort = 39849

@@ -18,6 +18,7 @@ export function getSession() {
     createTableIfMissing: false,
     ttl: sessionTtl,
     tableName: "sessions",
+    ssl: { rejectUnauthorized: false }
   });
   
   // Generate a secure session secret if not provided
