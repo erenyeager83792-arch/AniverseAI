@@ -1,6 +1,6 @@
 import session from "express-session";
 import type { Express, Request } from "express";
-import connectPg from "connect-pg-simple";
+import MemoryStore from "memorystore";
 import crypto from "crypto";
 
 // Extend session interface to include userId
@@ -12,13 +12,9 @@ declare module 'express-session' {
 
 export function getSession() {
   const sessionTtl = 7 * 24 * 60 * 60 * 1000; // 1 week
-  const pgStore = connectPg(session);
-  const sessionStore = new pgStore({
-    conString: process.env.DATABASE_URL,
-    createTableIfMissing: false,
-    ttl: sessionTtl,
-    tableName: "sessions",
-    ssl: { rejectUnauthorized: false }
+  const memoryStore = MemoryStore(session);
+  const sessionStore = new memoryStore({
+    checkPeriod: sessionTtl // prune expired entries every week
   });
   
   // Generate a secure session secret if not provided
