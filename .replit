@@ -1,5 +1,5 @@
 entrypoint = "main.sh"
-modules = ["bash"]
+modules = ["bash", "nodejs-20"]
 
 [nix]
 channel = "stable-24_05"
@@ -10,3 +10,36 @@ deploymentTarget = "cloudrun"
 
 [agent]
 expertMode = true
+integrations = ["perplexity_v0:1.0.0"]
+
+[workflows]
+runButton = "Project"
+
+[[workflows.workflow]]
+name = "Project"
+mode = "parallel"
+author = "agent"
+
+[[workflows.workflow.tasks]]
+task = "workflow.run"
+args = "Server"
+
+[[workflows.workflow]]
+name = "Server"
+author = "agent"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "cd AniverseChat && npm run dev"
+waitForPort = 5000
+
+[workflows.workflow.metadata]
+outputType = "webview"
+
+[[ports]]
+localPort = 5000
+externalPort = 80
+
+[[ports]]
+localPort = 36051
+externalPort = 3000
